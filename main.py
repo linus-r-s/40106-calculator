@@ -8,7 +8,6 @@ from bisect import bisect_left
 # Easier conversion of large and small values
 UNITS = {'k': 1000, 'M': 1000000, 'u': 0.000001, 'n': 0.000000001}
 
-
 def vp(vdd):
   '''
   Calculate positive threshold of inverter based on vdd
@@ -31,6 +30,13 @@ def parse_value(value):
     unit = value[-1]
     return float(value[:-1])*UNITS[unit]
 
+def color_codes(r):
+  COLOR_CODES = {'0': 'black', '1': 'brown', '2': 'red', '3': 'orange', '4': 'yellow', '5': 'green', '6': 'blue', '7': 'purple', '8': 'grey', '9': 'white'}
+  first = str(r)[0]
+  second = str(r)[1]
+  zeroes = str(len(str(r)[2:]))
+  return f'{COLOR_CODES[first]} {COLOR_CODES[second]} {COLOR_CODES[zeroes]}'
+
 def standard_value(r):
   values = [1.0, 1.2, 1.5, 1.8, 2.2, 2.7, 3.3, 3.9, 4.7, 5.6, 6.8, 8.2]
   mult = 1
@@ -51,7 +57,7 @@ def standard_value(r):
       r = before
   return int(r * mult)
 
-print(standard_value(100012))
+#print(standard_value(100012))
 
 
 def f(r, c, vdd):
@@ -70,6 +76,6 @@ def r(f, c, vdd):
   f = parse_value(f)
   c = parse_value(c)
   r = 1/(f*c*log(vp(vdd)*(vdd-vn(vdd))/vn(vdd)*(vdd-vp(vdd))))
-  return r
+  return f'Value: \t\t\t{standard_value(r)}\nColor code: \t{color_codes(standard_value(r))}'
 
-#print(r(2, '1u', 9))
+print(r(2, '.1u', 9))
